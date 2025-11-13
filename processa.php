@@ -1,116 +1,54 @@
 <?php
-// --- CLASS: Calculadora (métodos estáticos) ---
-final class Calculadora {
+// Descarrega o arquivo Calculadora.php e TrataeMostra.php,
+// que contêm as classes Calculadora e TrataeMostra.
+require_once 'Calculadora.php';
+require_once 'TrataeMostra.php';
 
-    // Método estático: Soma
-    public static function somar(float $a, float $b): float {
-        return $a + $b;
-    }
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Recebendo os valores e a operação
+    $valor1 = $_POST["valor1"] ?? "";
+    $valor2 = $_POST["valor2"] ?? "";
+    $operacao = $_POST["operacao"] ?? "";
 
-    // Método estático: Subtração
-    public static function subtrair(float $a, float $b): float {
-        return $a - $b;
-    }
+    // 1. Converte os valores para número usando a classe TrataeMostra
+    $val1 = TrataeMostra::parse_num($valor1);
+    $val2 = TrataeMostra::parse_num($valor2);
 
-    // Método estático: Multiplicação
-    public static function multiplicar(float $a, float $b): float {
-        return $a * $b;
-    }
+    $resultado = null;
+    $erro = null;
 
-    // Método estático: Divisão (com checagem de divisão por zero)
-    public static function dividir(float $a, float $b): float|string {
-        if ($b == 0.0) {
-            return "Erro: divisão por zero";
+    // Verifica se há erro de entrada
+    if ($val1 === null || $val2 === null) {
+        $erro = 'Entrada inválida. Certifique-se de informar números válidos.';
+    } else {
+        // 2. Executa a operação com base na classe Calculadora
+        switch ($operacao) {
+            case 'somar':
+                $resultado = Calculadora::somar($val1, $val2);
+                break;
+
+            case 'subtrair':
+                $resultado = Calculadora::subtrair($val1, $val2);
+                break;
+
+            case 'multiplicar':
+                $resultado = Calculadora::multiplicar($val1, $val2);
+                break;
+
+            case 'dividir':
+                if ($val2 == 0) {
+                    $erro = 'Divisão por zero não permitida.';
+                } else {
+                    $resultado = Calculadora::dividir($val1, $val2);
+                }
+                break;
+
+            default:
+                $erro = 'Operação desconhecida.';
         }
-        return $a / $b;
     }
 
-    // Método estático: validação e limpeza de número
-    public static function parse_num($val): ?float {
-        $s = trim($val);
-        $s = str_replace(',', '.', $s); // troca vírgula por ponto
-
-        // valida formato simples de número
-        if (!preg_match('/^[+-]?\d+(\.\d+)?$/', $s)) {
-            return null;
-        }
-
-        return floatval($s);
-    }
-
-    // Método estático: exibição do resultado
-    public static function exibirResultado(string $oper, string $erro, ?float $val1, ?float $val2, float|string $resultado): void {
-        echo "<h1>Resultado</h1>";
-
-        if (!empty($erro)) {
-            echo "<p class='erro'><strong>" . htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') . "</strong></p>";
-        } else {
-            echo "<p><strong>Operação:</strong> " . htmlspecialchars($oper, ENT_QUOTES, 'UTF-8') . "</p>";
-            echo "<p><strong>Expressão:</strong> " . htmlspecialchars($val1, ENT_QUOTES, 'UTF-8') . ' ';
-
-            switch ($oper) {
-                case 'somar':
-                    echo '+';
-                    break;
-                case 'subtrair':
-                    echo '-';
-                    break;
-                case 'multiplicar':
-                    echo '×';
-                    break;
-                case 'dividir':
-                    echo '÷';
-                    break;
-                default:
-                    echo '?';
-            }
-
-            echo ' ' . htmlspecialchars($val2, ENT_QUOTES, 'UTF-8') . "</p>";
-            echo "<p><strong>Resultado:</strong> " . htmlspecialchars($resultado, ENT_QUOTES, 'UTF-8') . "</p>";
-        }
-
-        echo "<p><a href='index.html'>Voltar</a></p>";
-    }
+    // 3. Exibe o resultado chamando método da classe TrataeMostra
+    TrataeMostra::exibirResultado($erro, $operacao, $val1, $val2, $resultado);
 }
-
-// --- PROCESSAMENTO PRINCIPAL ---
-$val1 = Calculadora::parse_num($_POST['valor1'] ?? '');
-$val2 = Calculadora::parse_num($_POST['valor2'] ?? '');
-$oper = $_POST['operacao'] ?? '';
-
-$result = null;
-$erro = null;
-
-// Verifica se os valores são válidos
-if ($val1 === null || $val2 === null) {
-    $erro = 'Entrada inválida. Certifique-se de informar números válidos.';
-} else {
-    switch ($oper) {
-        case 'somar':
-            $result = Calculadora::somar($val1, $val2);
-            break;
-
-        case 'subtrair':
-            $result = Calculadora::subtrair($val1, $val2);
-            break;
-
-        case 'multiplicar':
-            $result = Calculadora::multiplicar($val1, $val2);
-            break;
-
-        case 'dividir':
-            if ($val2 == 0) {
-                $erro = 'Divisão por zero não permitida.';
-            } else {
-                $result = Calculadora::dividir($val1, $val2);
-            }
-            break;
-
-        default:
-            $erro = 'Operação desconhecida.';
-    }
-}
-
-// Exibe resultado final
-Calculadora::exibirResultado($oper, $erro ?? '', $val1, $val2, $result ?? 0);
 ?>
