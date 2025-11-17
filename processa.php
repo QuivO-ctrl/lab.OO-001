@@ -1,7 +1,10 @@
 <?php
 // Descarrega o arquivo Calculadora.php e TrataeMostra.php,
 // que contêm as classes Calculadora e TrataeMostra.
-require_once 'Calculadora.php';
+require_once 'Soma.php';
+require_once 'Subtracao.php';
+require_once 'Multiplicacao.php';
+require_once 'Divisao.php';
 require_once 'TrataeMostra.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -17,8 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $resultado = null;
     $erro = null;
 
-    $calcoper = new Calculadora();
-
     // Verifica se há erro de entrada
     if ($val1 === null || $val2 === null) {
         $erro = 'Entrada inválida. Certifique-se de informar números válidos.';
@@ -26,22 +27,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // 2. Executa a operação com base na classe Calculadora
         switch ($operacao) {
             case 'somar':
-                $resultado = $calcoper->somar($val1, $val2);
+                $soma = new Soma();
+                $soma->setNum1($val1);
+                $soma->setNum2($valor2);
+                $result = $soma->calculaSoma();
                 break;
 
             case 'subtrair':
-                $resultado = $calcoper->subtrair($val1, $val2);
+                $subtracao = new Subtracao();
+                $subtracao->setNum1($val1);
+                $subtracao->setNum2($valor2);
+                $result = $subtracao->calculaSubtracao();
                 break;
 
             case 'multiplicar':
-                $resultado = $calcoper->multiplicar($val1, $val2);
+                $multiplicacao = new Multiplicacao();
+                $multiplicacao->setNum1($val1);
+                $multiplicacao->setNum2($valor2);
+                $result = $multiplicacao->calculaMultiplicacao();
                 break;
 
             case 'dividir':
-                if ($val2 == 0) {
+                $divisao = new Divisao();
+                $divisao->setNum1($val1);
+                $divisao->setNum2($valor2);
+                
+                if ($valor2 == 0) {
                     $erro = 'Divisão por zero não permitida.';
                 } else {
-                    $resultado = $calcoper->dividir($val1, $val2);
+                    $result = $divisao->calculaDivisao();
                 }
                 break;
 
@@ -51,6 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // 3. Exibe o resultado chamando método da classe estática
-    TrataeMostra::exibirResultado($erro, $operacao, $val1, $val2, $resultado);
+    TrataeMostra::exibirResultado($erro, $operacao, $val1, $val2, $result);
 }
 ?>
