@@ -1,5 +1,5 @@
 <?php 
-final class Divisao {
+final class Divisao implements IOperacao {
     private float $num1;
     private float $num2;
 
@@ -19,7 +19,7 @@ final class Divisao {
         $this->num2 = $num2;
     }
 
-    public function calculaDivisao(): float {
+    public function calcula(): float {
         if ($this->num2 == 0) {
             throw new Exception("Divisão por zero não é permitida.");
         }

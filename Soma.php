@@ -1,5 +1,5 @@
 <?php 
-final class Soma {
+final class Soma implements IOperacao {
     private float $num1;
     private float $num2;
 
@@ -19,7 +19,8 @@ final class Soma {
         $this->num2 = $num2;
     }
 
-    public function calculaSoma(): float {
+    public function calcula(): float
+    {
         return $this->num1 + $this->num2;
     }
 }

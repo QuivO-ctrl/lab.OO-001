@@ -6,6 +6,7 @@ require_once 'Subtracao.php';
 require_once 'Multiplicacao.php';
 require_once 'Divisao.php';
 require_once 'TrataeMostra.php';
+require_once 'IOperacao.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Recebendo os valores e a operação
@@ -29,33 +30,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             case 'somar':
                 $soma = new Soma();
                 $soma->setNum1($val1);
-                $soma->setNum2($valor2);
-                $result = $soma->calculaSoma();
+                $soma->setNum2($val2);
+                $result = $soma->calcula();
                 break;
 
             case 'subtrair':
                 $subtracao = new Subtracao();
                 $subtracao->setNum1($val1);
-                $subtracao->setNum2($valor2);
-                $result = $subtracao->calculaSubtracao();
+                $subtracao->setNum2($val2);
+                $result = $subtracao->calcula();
                 break;
 
             case 'multiplicar':
                 $multiplicacao = new Multiplicacao();
                 $multiplicacao->setNum1($val1);
-                $multiplicacao->setNum2($valor2);
-                $result = $multiplicacao->calculaMultiplicacao();
+                $multiplicacao->setNum2($val2);
+                $result = $multiplicacao->calcula();
                 break;
 
             case 'dividir':
                 $divisao = new Divisao();
                 $divisao->setNum1($val1);
-                $divisao->setNum2($valor2);
+                $divisao->setNum2($val2);
                 
                 if ($valor2 == 0) {
                     $erro = 'Divisão por zero não permitida.';
                 } else {
-                    $result = $divisao->calculaDivisao();
+                    $result = $divisao->calcula();
                 }
                 break;
 

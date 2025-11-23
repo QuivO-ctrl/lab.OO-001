@@ -1,5 +1,5 @@
 <?php 
-final class Subtracao {
+final class Subtracao implements IOperacao {
     private float $num1;
     private float $num2;
 
@@ -19,7 +19,8 @@ final class Subtracao {
         $this->num2 = $num2;
     }
 
-    public function calculaSubtracao(): float {
+    public function calcula(): float
+    {
         return $this->num1 - $this->num2;
     }
 }
