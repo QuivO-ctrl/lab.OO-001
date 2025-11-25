@@ -1,12 +1,10 @@
 <?php
-// Descarrega o arquivo Calculadora.php e TrataeMostra.php,
-// que contêm as classes Calculadora e TrataeMostra.
+require_once 'Operacoes.php';
 require_once 'Soma.php';
 require_once 'Subtracao.php';
 require_once 'Multiplicacao.php';
 require_once 'Divisao.php';
 require_once 'TrataeMostra.php';
-require_once 'IOperacao.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Recebendo os valores e a operação
@@ -20,49 +18,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $resultado = null;
     $erro = null;
+    $oper = null;
 
     // Verifica se há erro de entrada
     if ($val1 === null || $val2 === null) {
         $erro = 'Entrada inválida. Certifique-se de informar números válidos.';
     } else {
-        // 2. Executa a operação com base na classe Calculadora
+        
         switch ($operacao) {
             case 'somar':
-                $soma = new Soma();
-                $soma->setNum1($val1);
-                $soma->setNum2($val2);
-                $result = $soma->calcula();
+                $oper = new Soma();
                 break;
 
             case 'subtrair':
-                $subtracao = new Subtracao();
-                $subtracao->setNum1($val1);
-                $subtracao->setNum2($val2);
-                $result = $subtracao->calcula();
+                $oper = new Subtracao();
                 break;
 
             case 'multiplicar':
-                $multiplicacao = new Multiplicacao();
-                $multiplicacao->setNum1($val1);
-                $multiplicacao->setNum2($val2);
-                $result = $multiplicacao->calcula();
+                $oper = new Multiplicacao();
                 break;
 
             case 'dividir':
-                $divisao = new Divisao();
-                $divisao->setNum1($val1);
-                $divisao->setNum2($val2);
-                
-                if ($valor2 == 0) {
-                    $erro = 'Divisão por zero não permitida.';
-                } else {
-                    $result = $divisao->calcula();
-                }
+                $oper = new Divisao();
                 break;
-
+                  
             default:
-                $erro = 'Operação desconhecida.';
+            $erro = 'Operação desconhecida.';
         }
+        $oper->setNum1($val1);
+        $oper->setNum2($val2);
+        $result = $oper->calcula();
     }
 
     // 3. Exibe o resultado chamando método da classe estática
