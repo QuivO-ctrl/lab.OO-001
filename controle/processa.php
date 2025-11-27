@@ -1,10 +1,10 @@
 <?php
-require_once 'Operacoes.php';
-require_once 'Soma.php';
-require_once 'Subtracao.php';
-require_once 'Multiplicacao.php';
-require_once 'Divisao.php';
-require_once 'TrataeMostra.php';
+require_once '../modelo/Operacoes.php';
+require_once '../modelo/Soma.php';
+require_once '../modelo/Subtracao.php';
+require_once '../modelo/Multiplicacao.php';
+require_once '../modelo/Divisao.php';
+require_once '../visualizacao/TrataeMostra.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Recebendo os valores e a operação
